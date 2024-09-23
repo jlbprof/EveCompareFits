@@ -1,7 +1,5 @@
 # EveCompareFits
 Compare 2 Eve Online Ship Fits to find out what new modules you need to buy.
-<<<<<<< Updated upstream
-=======
 
 I am responsible for handing out ships to new folk in our corporation.  Often we change the fit, usually just one module, and I need to update the ships in the corp hanger to make sure they conform to the new fit.
 
@@ -16,8 +14,6 @@ To use the program:
 If on Windows
 
 `.\EveCompareFits.exe path_to_original_fit path_to_new_fit`
-
-Example with real files:
 
 `.\EveCompareFits.exe .\Fits\Moa_Roamer_II.fit .\Fits\Moa_6th_Rate_Fireship_Hv.fit`
 
@@ -46,4 +42,4 @@ Things that need to be done:
 * I am not fully confident in the fit parser, so I want to add unit tests for any fits that might be problematic.
 * I want to add some command line options such as `--justparse` where the program would parse each listed fit file and output the fit, so we can tell it is parsed correctly.
 * PR's will be reviewed and if I like it, will merge it.
->>>>>>> Stashed changes
+
