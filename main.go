@@ -6,6 +6,7 @@ import (
 	"os"
 	"regexp"
 	"strconv"
+	"strings"
 )
 
 // The cargo item structure is designed to parse the following cargo items or drones that often appear in a fit file
@@ -33,6 +34,8 @@ type ship struct {
 	drones map[string]int
 	cargo  map[string]int
 }
+
+var version = "0.1.0"
 
 // just encapsulate the logic to determine if a key is in a map
 func doesKeyExist(mymap map[string]int, key string) bool {
@@ -79,6 +82,7 @@ func parseCargoItem(line string) cargoItem {
 func myReadLine(s *bufio.Scanner) (string, bool) {
 	b := s.Scan()
 	if !b {
+		fmt.Println("ERROR myReadLine", b)
 		return "", b
 	}
 
@@ -97,7 +101,7 @@ func printSlots(items map[string]int, label string) {
 
 // print the entire fit
 func printShip(thisShip ship) {
-	fmt.Println("Ship :", thisShip.shipName, thisShip.shipType)
+	fmt.Println("Ship:", thisShip.shipName, "Type:", thisShip.shipType)
 
 	printSlots(thisShip.lowSlots, "Low Slots")
 	printSlots(thisShip.midSlots, "Mid Slots")
@@ -147,11 +151,18 @@ func readInFit(fName string) ship {
 	thisShip.cargo = make(map[string]int)
 
 	scanner := bufio.NewScanner(file)
+	if scanner == nil {
+		fmt.Println("SCANNER IS NIL")
+		os.Exit(1)
+	}
 
 	line, b = myReadLine(scanner)
 	if !b {
+		fmt.Println("LINE", line)
 		fmt.Println("Error Reading Ship Type and Name")
+		os.Exit(1)
 	}
+
 	thisShip.shipType, thisShip.shipName = parseShipTypeAndName(line)
 
 	// immediately next we get the low slots
@@ -334,6 +345,43 @@ func compareTwoShips(ship1 ship, ship2 ship) {
 }
 
 func main() {
+	bVersion := false   // Are they requesting only the version?
+	bJustParse := false // should we only parse
+
+	for _, arg := range os.Args {
+		if strings.ToLower(arg) == "--version" {
+			bVersion = true
+		}
+
+		if strings.ToLower(arg) == "--justparse" {
+			bJustParse = true
+		}
+	}
+
+	if bVersion {
+		fmt.Println(version)
+		os.Exit(0)
+	}
+
+	// Identify the program
+	fmt.Printf("Eve Compare Fits: Version %s\n\n", version)
+
+	if bJustParse {
+		for i, arg := range os.Args {
+			if i == 0 {
+				continue
+			}
+			if strings.ToLower(arg) == "--justparse" {
+				continue
+			}
+			ship := readInFit(arg)
+			fmt.Println("Ship File", arg)
+			printShip(ship)
+			fmt.Println("")
+		}
+		os.Exit(0)
+	}
+
 	if len(os.Args) < 2 {
 		fmt.Println("Please provide 2 Fit files for comparison.")
 		os.Exit(1)
@@ -342,16 +390,8 @@ func main() {
 	firstFileName := os.Args[1]
 	secondFileName := os.Args[2]
 
-	fmt.Println("FirstFile", firstFileName)
-	fmt.Println("SecondFile", secondFileName)
-
 	ship1 := readInFit(firstFileName)
-	//	printShip(ship1)
-	//	fmt.Println("")
-	//	fmt.Println("")
-
 	ship2 := readInFit(secondFileName)
-	//	printShip(ship2)
 
 	compareTwoShips(ship1, ship2)
 }
