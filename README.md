@@ -13,15 +13,15 @@ To that end I created this command line tool, written in Go, which allows it to 
 
 To use the program:
 
-`./EveCompareFits path_to_original_fit path_to_new_fit`
+    ./EveCompareFits path_to_original_fit path_to_new_fit
 
 If on Windows
 
-`.\EveCompareFits.exe path_to_original_fit path_to_new_fit`
+    .\EveCompareFits.exe path_to_original_fit path_to_new_fit
 
 Example with real files:
 
-`.\EveCompareFits.exe .\Fits\Moa_Roamer_II.fit .\Fits\Moa_6th_Rate_Fireship_Hv.fit`
+    .\EveCompareFits.exe .\Fits\Moa_Roamer_II.fit  .\Fits\Moa_6th_Rate_Fireship_Hv.fit
 
 It will list 2 things of import:
 
@@ -32,13 +32,19 @@ To build for your platform after installing golang.
 
 On Windows:
 
-`go build -o "EveCompareFits.exe" main.go`
+    go build -o "EveCompareFits.exe" main.go
 
 On other platforms
 
-`go build -o "EveCompareFits" main.go`
+    go build -o "EveCompareFits" main.go
 
 Go will create the executable file and you can execute as described above.
+
+## Other things you can do
+
+* EveCompareFits --version, shows the version number
+* EveCompareFits --justparse fit1 fit2 fit3, will parse each fit, and print out the fit.
+  Used mostly to debug parsing.
 
 Things that need to be done:
 
@@ -46,6 +52,5 @@ Things that need to be done:
 * I know I can use github actions to create the executables for all 3 platforms, what I do not know how to do is tell Github this is the new release and here are the executables.
 * Help for above would be appreciated.
 * I am not fully confident in the fit parser, so I want to add unit tests for any fits that might be problematic.
-* I want to add some command line options such as `--justparse` where the program would parse each listed fit file and output the fit, so we can tell it is parsed correctly.
 * PR's will be reviewed and if I like it, will merge it.
 
